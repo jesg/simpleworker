@@ -1,0 +1,4 @@
+simpleworker
+============
+
+Distribute scripts
