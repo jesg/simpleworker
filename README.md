@@ -1,4 +1,4 @@
-simpleworker
+SimpleWorker
 ============
 
 Distribute scripts

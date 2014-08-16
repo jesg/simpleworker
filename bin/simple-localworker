@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "Ruby Version $(ruby -v)"
+
+bundle install
+bundle exec ${RUBY_TASK}
+
