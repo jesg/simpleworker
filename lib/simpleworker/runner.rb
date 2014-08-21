@@ -15,9 +15,9 @@ class SimpleWorker::Runner
     stop
   rescue Interrupt
     stop
-  rescue StandardError
+  rescue StandardError => e
     stop
-    raise
+    raise e
   end
 
   private

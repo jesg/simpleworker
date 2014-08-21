@@ -12,9 +12,7 @@ module SimpleWorker::AbstractWorker
 
     @process.io.inherit!
 
-    env.each do |key, value|
-      @process.environment[key] = value
-    end
+    set_process_env
 
     @process.start
   end
@@ -30,4 +28,13 @@ module SimpleWorker::AbstractWorker
   def env
     @env
   end
+
+  private
+
+  def set_process_env
+    env.each do |key, value|
+      @process.environment[key] = value
+    end
+  end
+
 end

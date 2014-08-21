@@ -1,0 +1,21 @@
+#!/bin/bash
+
+rsync -ar --delete -e ssh "${PWD}/" "${user}@${host}:${directory}"
+
+remote_script=$(cat << EOF
+
+cd ${directory};
+echo "Ruby Version: \$(ruby -v)";
+echo "Which ruby: \$(which ruby)";
+
+echo "PWD: \${PWD}";
+
+bundle install;
+bundle exec ${RUBY_TASK};
+
+EOF
+)
+
+ssh "${user}@${host}" "bash -lc '${remote_script}'"
+
+rsync -ar -e ssh "${user}@${host}:${directory}" "${PWD}/"
