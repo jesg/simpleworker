@@ -20,7 +20,7 @@ module SimpleWorker
       mock_process.should_receive(:wait)
       mock_process.should_receive(:stop)
 
-      worker = LocalWorker.new 'cuke'
+      worker = LocalWorker.new %w[cuke]
       worker.start
       worker.wait
       worker.stop

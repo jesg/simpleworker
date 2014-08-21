@@ -7,9 +7,9 @@ module SimpleWorker
       'RUBY_TASK' => 'rake'
     }
 
-    def initialize(*args)
+    def initialize(cmd = nil)
       @script = 'simple-localworker'
-      env = args.empty? ? {} : {'RUBY_TASK' => args.join(' ')}
+      env = cmd ? {'RUBY_TASK' => cmd.join(' ')} : {}
       @env = DEFAULT_ENV.dup.merge(env)
     end
   end
