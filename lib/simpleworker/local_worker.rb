@@ -4,7 +4,7 @@ module SimpleWorker
     include AbstractWorker
 
     def initialize
-      @script = 'simple-localworker'
+      @script = %W[bash #{File.expand_path(File.dirname(__FILE__))}/bash/simple-localworker]
       @env = {}
     end
 

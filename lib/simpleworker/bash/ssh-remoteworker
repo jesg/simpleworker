@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rsync -ar --delete -e ssh "${PWD}/" "${user}@${host}:${directory}"
+rsync -ar --delete  -e ssh "${PWD}/" "${user}@${host}:${directory}"
 
 remote_script=$(cat << EOF
 
@@ -18,4 +18,4 @@ EOF
 
 ssh "${user}@${host}" "bash -lc '${remote_script}'"
 
-rsync -ar -e ssh "${user}@${host}:${directory}" "${PWD}/"
+rsync -ar -e ssh "${user}@${host}:${directory}/" "${PWD}/"

@@ -6,7 +6,7 @@ module SimpleWorker
     attr_accessor :directory, :user, :host
 
     def initialize
-      @script = 'ssh-remoteworker'
+      @script = %W[bash #{File.expand_path(File.dirname(__FILE__))}/bash/ssh-remoteworker]
       @env = {}
     end
 

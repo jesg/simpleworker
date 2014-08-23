@@ -6,7 +6,7 @@ module SimpleWorker
     let(:mock_process) { double(ChildProcess, :start => nil, :stop => nil, :wait => nil, :io => double('io').as_null_object, :environment => mock_env) }
 
     it 'can start local worker with defaults' do
-      ChildProcess.should_receive(:build).with('simple-localworker').and_return(mock_process)
+      ChildProcess.should_receive(:build).with('bash', end_with('simple-localworker')).and_return(mock_process)
       mock_process.should_receive(:start)
       mock_env.should_receive(:[]=).with('cmd', 'rake')
 
@@ -16,7 +16,7 @@ module SimpleWorker
     end
 
     it 'can start local worker with customization' do
-      ChildProcess.should_receive(:build).with('simple-localworker').and_return(mock_process)
+      ChildProcess.should_receive(:build).with('bash', end_with('simple-localworker')).and_return(mock_process)
       mock_process.should_receive(:start)
       mock_env.should_receive(:[]=).with('cmd', 'cuke')
       mock_process.should_receive(:wait)

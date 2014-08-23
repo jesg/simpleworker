@@ -6,7 +6,7 @@ module SimpleWorker
     let(:mock_process) { double(ChildProcess, :start => nil, :stop => nil, :wait => nil, :io => double('io').as_null_object, :environment => mock_env) }
 
     it 'can start ssh worker with defaults' do
-      ChildProcess.should_receive(:build).with('ssh-remoteworker').and_return(mock_process)
+      ChildProcess.should_receive(:build).with('bash', end_with('ssh-remoteworker')).and_return(mock_process)
       mock_process.should_receive(:start)
       mock_env.should_receive(:[]=).once.with('cmd', 'rake')
       mock_env.should_receive(:[]=).once.with('user', `whoami`)
@@ -19,7 +19,7 @@ module SimpleWorker
     end
 
     it 'can start ssh worker with customization' do
-      ChildProcess.should_receive(:build).with('ssh-remoteworker').and_return(mock_process)
+      ChildProcess.should_receive(:build).with('bash', end_with('ssh-remoteworker')).and_return(mock_process)
       mock_process.should_receive(:start)
       mock_env.should_receive(:[]=).once.with('cmd', 'cuke')
       mock_env.should_receive(:[]=).once.with('user', 'bob')
