@@ -17,7 +17,6 @@ module SimpleWorker
       worker.user = config['user'] if config.has_key? 'user'
       worker.host = config['host'] if config.has_key? 'host'
       worker.directory = config['directory'] if config.has_key? 'directory'
-      worker.out = config['out'] if config.has_key? 'out'
       worker
     end
 

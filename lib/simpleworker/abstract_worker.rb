@@ -1,7 +1,7 @@
 
 module SimpleWorker::AbstractWorker
 
-  attr_accessor :script, :cmd, :out
+  attr_accessor :script, :cmd
 
   def start
     if script.kind_of? Array
@@ -10,9 +10,7 @@ module SimpleWorker::AbstractWorker
       @process = ChildProcess.build script
     end
 
-    if out
-      @process.io.stderr = @process.io.stdout = File.open(out, 'w')
-    end
+    @process.io.inherit!
 
     set_process_env
 
