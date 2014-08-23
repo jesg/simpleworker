@@ -16,7 +16,6 @@ workers:
     directory: /tmp/foobar         # directory on remote host
     user: bill                     # user on remote host
     host: my.remote.host.com       # remote host name
-    out: worker.log                # redirect stdout and stderr to log file
 ```
 
 ```ruby
