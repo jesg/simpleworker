@@ -8,19 +8,22 @@ module SimpleWorker
     it 'can start local worker with defaults' do
       ChildProcess.should_receive(:build).with('simple-localworker').and_return(mock_process)
       mock_process.should_receive(:start)
-      mock_env.should_receive(:[]=).with('RUBY_TASK', 'rake')
+      mock_env.should_receive(:[]=).with('cmd', 'rake')
 
-      LocalWorker.new.start
+      worker = LocalWorker.new
+      worker.cmd = 'rake'
+      worker.start
     end
 
     it 'can start local worker with customization' do
       ChildProcess.should_receive(:build).with('simple-localworker').and_return(mock_process)
       mock_process.should_receive(:start)
-      mock_env.should_receive(:[]=).with('RUBY_TASK', 'cuke')
+      mock_env.should_receive(:[]=).with('cmd', 'cuke')
       mock_process.should_receive(:wait)
       mock_process.should_receive(:stop)
 
-      worker = LocalWorker.new %w[cuke]
+      worker = LocalWorker.new
+      worker.cmd = 'cuke'
       worker.start
       worker.wait
       worker.stop

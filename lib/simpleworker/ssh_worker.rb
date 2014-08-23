@@ -3,16 +3,21 @@ module SimpleWorker
   class SshWorker
     include AbstractWorker
 
-    DEFAULT_ENV = {
-      'RUBY_TASK' => 'rake'
-    }
-
     attr_accessor :directory, :user, :host
 
-    def initialize(cmd = nil)
+    def initialize
       @script = 'ssh-remoteworker'
-      env = cmd ? {'RUBY_TASK' => cmd.join(' ')} : {}
-      @env = DEFAULT_ENV.dup.merge(env)
+      @env = {}
+    end
+
+    def self.create(config = {})
+      worker = new
+      worker.script = config['script'] if config.has_key? 'script'
+      worker.cmd = config['cmd'] if config.has_key? 'cmd'
+      worker.user = config['user'] if config.has_key? 'user'
+      worker.host = config['host'] if config.has_key? 'host'
+      worker.directory = config['directory'] if config.has_key? 'directory'
+      worker
     end
 
     private

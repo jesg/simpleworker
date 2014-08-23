@@ -11,7 +11,7 @@ echo "Which ruby: \$(which ruby)";
 echo "PWD: \${PWD}";
 
 bundle install;
-bundle exec ${RUBY_TASK};
+bundle exec ${cmd};
 
 EOF
 )

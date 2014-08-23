@@ -1,7 +1,8 @@
 #!/bin/bash
 
 echo "Ruby Version $(ruby -v)"
+echo "Which ruby: $(which ruby)"
 
 bundle install
-bundle exec ${RUBY_TASK}
+bundle exec ${cmd}
 

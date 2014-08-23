@@ -1,5 +1,6 @@
 
 require 'childprocess'
+require 'yaml'
 
 module SimpleWorker
 end

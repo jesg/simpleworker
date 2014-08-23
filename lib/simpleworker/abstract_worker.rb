@@ -2,6 +2,7 @@
 module SimpleWorker::AbstractWorker
 
   attr_accessor :script
+  attr_accessor :cmd
 
   def start
     if script.kind_of? Array
@@ -10,7 +11,7 @@ module SimpleWorker::AbstractWorker
       @process = ChildProcess.build script
     end
 
-    @process.io.inherit!
+    @process.io.stderr = @process.io.stdout = $stdout
 
     set_process_env
 
@@ -32,6 +33,8 @@ module SimpleWorker::AbstractWorker
   private
 
   def set_process_env
+    env['cmd'] ||= cmd
+
     env.each do |key, value|
       @process.environment[key] = value
     end
