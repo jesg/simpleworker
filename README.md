@@ -28,6 +28,11 @@ SimpleWorker::Runnner.run "my-command"
 SimpleWorker::Runner.load("my-worker-config.yml").run "my-command"
 ```
 
+Examples
+========
+
+[Distribute cucumber scenarios](http://jesg.github.io/testing/2014/08/23/distributed-cucumber.html)
+
 Note on Patches/Pull Requests
 =============================
 
