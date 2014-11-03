@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
 require "simpleworker/version"
 
@@ -16,6 +15,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "simpleworker"
 
   s.add_dependency 'childprocess', '>= 0.5.3'
+  s.add_dependency 'redis', '>= 0.0.1'
 
   s.add_development_dependency "rspec", "~> 2.5"
   s.add_development_dependency "rake", "~> 0.9.2"
