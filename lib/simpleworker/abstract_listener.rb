@@ -28,6 +28,9 @@ module SimpleWorker
     def on_log(hostname, msg)
     end
 
+    def on_interrupted
+    end
+
     def on_timeout
     end
 
