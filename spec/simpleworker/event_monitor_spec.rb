@@ -4,9 +4,9 @@ module SimpleWorker
   describe EventMonitor do
     let(:start_time)    { Time.now }
     let(:event_monitor) { EventMonitor.new(start_time = start_time) }
-    let(:jobid) { 'my_jobid' }
-    let(:hostname) { 'my_hostname' }
-    let(:task) { 'my_task' }
+    let(:jobid)         { 'my_jobid' }
+    let(:hostname)      { 'my_hostname' }
+    let(:task)          { 'my_task' }
 
     it 'can initialize event monitor' do
       event_monitor = EventMonitor.new(start_time = start_time)
