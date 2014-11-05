@@ -5,8 +5,8 @@ module SimpleWorker
     include Observable
 
     DEFAULT_OPTIONS = {
-      :timeout => 30,
-      :interval => 5,
+      :timeout   => 30,
+      :interval  => 5,
       :namespace => 'simpleworker'}
 
     def initialize(redis, tasks, opts = {})
