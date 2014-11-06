@@ -24,26 +24,8 @@ module SimpleWorker
       @interval = opts[:interval]
     end
 
-    def self.run
-      new.load.run
-    end
-
-    def self.load(config = 'simpleworker.yml')
-      new.load(config)
-    end
-
-    def load(config = 'simpleworker.yml')
-      data = YAML.load( IO.read(config) )
-      data['workers'].each do |config|
-        case config['type']
-        when 'ssh'
-          @workers << SshWorker.create(config)
-        else
-          @workers << LocalWorker.create(config)
-        end
-      end
-
-      self
+    def self.run(redis, tasks, opts = {})
+      new(redis, tasks, opts).run
     end
 
     def run
