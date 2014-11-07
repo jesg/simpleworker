@@ -19,27 +19,27 @@ module SimpleWorker
       load_lua_scripts
     end
 
-    def on_start
-      push_to_redis_log('on_node_start', @hostname)
+    def fire_start
+      push_to_log('on_node_start', @hostname)
     end
 
-    def on_stop
-      push_to_redis_log('on_node_stop', @hostname)
+    def fire_stop
+      push_to_log('on_node_stop', @hostname)
     end
 
-    def on_task_start(task)
-      push_to_redis_log('on_task_start', @hostname, task)
+    def fire_task_start(task)
+      push_to_log('on_task_start', @hostname, task)
     end
 
-    def on_task_stop(task)
-      push_to_redis_log('on_task_stop', @hostname, task)
+    def fire_task_stop(task)
+      push_to_log('on_task_stop', @hostname, task)
     end
 
     def each_task
       until pop.nil?
-        on_task_start @current_task
+        fire_task_start @current_task
         yield @current_task
-        on_task_stop @current_task
+        fire_task_stop @current_task
       end
     end
 
@@ -53,7 +53,7 @@ module SimpleWorker
 
     private
 
-    def push_to_redis_log(*args)
+    def push_to_log(*args)
       @redis.rpush(log_key, args.to_json)
     end
   end

@@ -11,25 +11,25 @@ module SimpleWorker
     it 'can log node start' do
       redis.should_receive(:rpush).with('simpleworker:log:my_jobid', ['on_node_start', hostname].to_json)
 
-      task_queue.on_start
+      task_queue.fire_start
     end
 
     it 'can log node stop' do
       redis.should_receive(:rpush).with('simpleworker:log:my_jobid', ['on_node_stop', hostname].to_json)
 
-      task_queue.on_stop
+      task_queue.fire_stop
     end
 
     it 'can log task start' do
       redis.should_receive(:rpush).with('simpleworker:log:my_jobid', ['on_task_start', hostname, task].to_json)
 
-      task_queue.on_task_start(task)
+      task_queue.fire_task_start(task)
     end
 
     it 'can log task stop' do
       redis.should_receive(:rpush).with('simpleworker:log:my_jobid', ['on_task_stop', hostname, task].to_json)
 
-      task_queue.on_task_stop(task)
+      task_queue.fire_task_stop(task)
     end
 
     it 'can pop from reliable queue' do
@@ -46,8 +46,8 @@ module SimpleWorker
       redis.should_receive(:evalsha).and_return('first_task', 'second_task', nil)
       redis.stub(:srem)
 
-      expect(task_queue).to receive(:on_task_start).exactly(2).times
-      expect(task_queue).to receive(:on_task_stop).exactly(2).times
+      expect(task_queue).to receive(:fire_task_start).exactly(2).times
+      expect(task_queue).to receive(:fire_task_stop).exactly(2).times
 
       result = []
       task_queue.each_task { |task| result << task }
