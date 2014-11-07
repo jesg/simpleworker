@@ -41,5 +41,17 @@ module SimpleWorker
       task_queue.pop.should eq 'second_task'
       task_queue.pop.should be nil
     end
+
+    it 'can iterate through tasks' do
+      redis.should_receive(:evalsha).and_return('first_task', 'second_task', nil)
+      redis.stub(:srem)
+
+      expect(task_queue).to receive(:on_task_start).exactly(2).times
+      expect(task_queue).to receive(:on_task_stop).exactly(2).times
+
+      result = []
+      task_queue.each_task { |task| result << task }
+      result.should eq ['first_task', 'second_task']
+    end
   end
 end

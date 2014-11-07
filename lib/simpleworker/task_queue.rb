@@ -35,6 +35,14 @@ module SimpleWorker
       push_to_redis_log('on_task_stop', @hostname, task)
     end
 
+    def each_task
+      until pop.nil?
+        on_task_start @current_task
+        yield @current_task
+        on_task_stop @current_task
+      end
+    end
+
     def pop
       @redis.srem(active_tasks_key, "#{@active_key_prefix}:#{@current_task}") if @current_task
       @current_task = @redis.evalsha(@reliable_queue_sha,
