@@ -2,7 +2,7 @@ require File.expand_path('../../spec_helper.rb', __FILE__)
 
 module SimpleWorker
   describe Runner do
-    let(:redis)              { double(Redis) }
+    let(:redis)              { double(Redis, :script => nil) }
     let(:tasks)              { ['ask1', 'task2'] }
     let(:hostname)           { 'my_hostname' }
     let(:jobid)              { 'my_jobid' }
@@ -17,6 +17,7 @@ module SimpleWorker
       EventServer.should_receive(:new).and_return(mock_event_server)
       EventMonitor.should_receive(:new).and_return(mock_event_monitor)
       redis.should_receive(:rpush).with("simpleworker:tasks:#{jobid}", tasks)
+
       redis.should_receive(:multi)
     end
 

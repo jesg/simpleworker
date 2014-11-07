@@ -2,7 +2,7 @@ require File.expand_path('../../spec_helper.rb', __FILE__)
 
 module SimpleWorker
   describe EventServer do
-    let(:redis)            { double(Redis) }
+    let(:redis)            { double(Redis, :script => nil) }
     let(:namespace)        { 'my_namespace' }
     let(:jobid)            { 'my_jobid' }
     let(:event_server)     { EventServer.new(redis, namespace, jobid) }

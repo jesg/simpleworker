@@ -7,6 +7,7 @@ module SimpleWorker
       @redis     = redis
       @namespace = namespace
       @jobid     = jobid
+      load_lua_scripts
     end
 
     def pull_events

@@ -4,6 +4,8 @@ module SimpleWorker
     include RedisSupport
     include Observable
 
+    attr_reader :jobid
+
     DEFAULT_OPTIONS = {
       :timeout   => 30,
       :interval  => 5,
@@ -15,6 +17,7 @@ module SimpleWorker
       @redis = redis
       @jobid = SecureRandom.hex(6)
       @namespace = opts[:namespace]
+      load_lua_scripts
       @redis.rpush(tasks_key, tasks)
       @event_server = EventServer.new(redis, namespace, jobid)
       @event_monitor = EventMonitor.new
