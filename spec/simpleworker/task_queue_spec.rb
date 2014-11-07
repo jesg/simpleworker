@@ -2,10 +2,10 @@ require File.expand_path('../../spec_helper.rb', __FILE__)
 
 module SimpleWorker
   describe TaskQueue do
-    let(:redis) { double(Redis, :script => 'my_sha') }
-    let(:jobid) { 'my_jobid' }
-    let(:task) { 'my_task' }
-    let(:hostname) { 'my_hostname' }
+    let(:redis)      { double(Redis, :script => 'my_sha') }
+    let(:jobid)      { 'my_jobid' }
+    let(:task)       { 'my_task' }
+    let(:hostname)   { 'my_hostname' }
     let(:task_queue) { TaskQueue.new(redis, hostname, jobid) }
 
     it 'can log node start' do
