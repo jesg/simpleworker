@@ -1,5 +1,17 @@
 
 module SimpleWorker
+
+  #
+  # Runner.run(redis, tasks, opts)
+  #
+  # where tasks is an Array of strings
+  # and 'opts' is a Hash of options:
+  #
+  #   :namespace   => String                  prefix to keys in redis used by SimpleWorker (default: simpleworker)
+  #   :timeout     => Fixnum                  max allowed time between events (default: 30 seconds)
+  #   :interval    => Fixnum                  interval at which SimpleWorker checks the status of all tasks (default: 5 seconds)
+  #   :notify      => Array[AbstractListener] objects implementing the AbstractListener API
+  #   :max_retries => Fixnum                  number of times expired tasks will be retried (default: 0)
   class Runner
     include RedisSupport
     include Observable
