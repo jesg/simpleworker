@@ -16,13 +16,13 @@ module SimpleWorker
     def initialize(redis, tasks, opts = {})
       opts = DEFAULT_OPTIONS.dup.merge(opts)
 
-      @redis = redis
-      @jobid = SecureRandom.hex(6)
-      @namespace = opts[:namespace]
-      @timeout = opts[:timeout]
-      @interval = opts[:interval]
+      @redis      = redis
+      @jobid      = SecureRandom.hex(6)
+      @namespace  = opts[:namespace]
+      @timeout    = opts[:timeout]
+      @interval   = opts[:interval]
       max_retries = opts[:max_retries]
-      listeners = Array(opts[:notify])
+      listeners   = Array(opts[:notify])
 
       load_lua_scripts
       @redis.rpush(tasks_key, tasks)
