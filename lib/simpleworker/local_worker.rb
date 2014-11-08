@@ -2,8 +2,13 @@
 module SimpleWorker
   class LocalWorker < AbstractListener
 
-    def initialize(cmd = '/bin/bash -l bundle exec rake')
-      @process = ChildProcess.build(cmd)
+    DEFAULT_CMD = ['/bin/bash', '-l', 'bundle', 'exec', 'rake']
+
+    def initialize(*args)
+      cmd = args
+      cmd = DEFAULT_CMD if cmd.empty?
+      @process = ChildProcess.build(*cmd)
+      @process.io.inherit!
     end
 
     def on_start(jobid)
