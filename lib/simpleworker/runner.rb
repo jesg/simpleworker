@@ -9,7 +9,8 @@ module SimpleWorker
     DEFAULT_OPTIONS = {
       :timeout   => 30,
       :interval  => 5,
-      :namespace => 'simpleworker'}
+      :namespace => 'simpleworker',
+      :log       => true}
 
     def initialize(redis, tasks, opts = {})
       opts = DEFAULT_OPTIONS.dup.merge(opts)
@@ -19,11 +20,15 @@ module SimpleWorker
       @namespace = opts[:namespace]
       @timeout = opts[:timeout]
       @interval = opts[:interval]
+      listeners = Array(opts[:notify])
 
       load_lua_scripts
       @redis.rpush(tasks_key, tasks)
 
-      listeners = Array(opts[:notify])
+      if opts[:log]
+        listeners << LoggingListener.new
+      end
+
       @event_server = EventServer.new(redis, namespace, jobid)
       @event_monitor = EventMonitor.new
       listeners << @event_monitor
