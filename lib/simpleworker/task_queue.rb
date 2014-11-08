@@ -4,7 +4,7 @@ module SimpleWorker
     include RedisSupport
 
     DEFAULT_OPTIONS = {
-      :task_timeout => 30,
+      :task_timeout => 10,
       :namespace    => 'simpleworker'
     }
 
