@@ -9,6 +9,7 @@ module SimpleWorker
     let(:runner)             { Runner.new(redis, tasks, :timeout => 120, :interval => 0) }
     let(:mock_event_monitor) { double(EventMonitor, :update => nil) }
     let(:mock_event_server)  { double(EventServer, :add_observer => nil) }
+    let(:mock_retry_listener) { double(RetryListener, :update => nil, :tasks => [] ) }
     let(:listener)           { double(AbstractListener, :update => nil) }
 
     before(:each) do
@@ -16,6 +17,7 @@ module SimpleWorker
 
       EventServer.should_receive(:new).and_return(mock_event_server)
       EventMonitor.should_receive(:new).and_return(mock_event_monitor)
+      RetryListener.should_receive(:new).and_return(mock_retry_listener)
       redis.should_receive(:rpush).with("simpleworker:tasks:#{jobid}", tasks)
 
       redis.should_receive(:multi)
@@ -60,6 +62,20 @@ module SimpleWorker
       listener.should_receive(:update).with("on_interrupted")
 
       lambda { runner.run }.should raise_error(StandardError)
+    end
+
+    it 'continue to run if retries exist' do
+      mock_event_monitor.should_receive(:done?).twice.with(2).and_return(false)
+      mock_event_monitor.should_receive(:done?).with(0).and_return(true)
+      mock_event_server.should_receive(:pull_events).and_return(2, 0, 0)
+      mock_retry_listener.should_receive(:tasks).and_return([1,2], [])
+
+      mock_event_monitor.should_receive(:latest_time).twice.and_return(Time.now)
+      runner.add_observer listener
+      listener.should_receive(:update).with("on_start", jobid)
+      listener.should_receive(:update).with("on_stop")
+
+      runner.run
     end
   end
 end

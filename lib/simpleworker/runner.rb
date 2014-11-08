@@ -34,7 +34,9 @@ module SimpleWorker
       @event_server = EventServer.new(redis, namespace, jobid)
       @event_monitor = EventMonitor.new
       listeners << @event_monitor
-      listeners << RetryListener.new(redis, max_retries, namespace, jobid)
+
+      @retry_listener = RetryListener.new(redis, max_retries, namespace, jobid)
+      listeners << @retry_listener
 
       listeners.each do |listener|
         add_observer listener
@@ -72,6 +74,9 @@ module SimpleWorker
         sleep @interval
 
         remaining_tasks = @event_server.pull_events
+        remaining_tasks += @retry_listener.tasks.size
+        @retry_listener.tasks.clear
+
         current_time = Time.now
         if (current_time - @event_monitor.latest_time) > @timeout
           fire('on_timeout')
