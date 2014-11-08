@@ -2,7 +2,8 @@ require 'simpleworker'
 
 tasks = ['first', 'second', 'third']
 redis = Redis.new
-runner = SimpleWorker::Runner.new(redis, tasks)
+runner = SimpleWorker::Runner.new(redis, tasks,
+                                  :max_retries => 2)
 
 worker_thread = Thread.new do
   task_queue = SimpleWorker::TaskQueue.new(redis, 'my_hostname', runner.jobid)
@@ -10,7 +11,11 @@ worker_thread = Thread.new do
   task_queue.fire_start
 
   task_queue.each_task do |task|
-    puts "Task: #{task}"
+    if task == 'first'
+      sleep 15
+    else
+      puts "Task: #{task}"
+    end
   end
 
   task_queue.fire_stop
