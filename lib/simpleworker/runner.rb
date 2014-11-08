@@ -17,14 +17,21 @@ module SimpleWorker
       @redis = redis
       @jobid = SecureRandom.hex(6)
       @namespace = opts[:namespace]
-      load_lua_scripts
-      @redis.rpush(tasks_key, tasks)
-      @event_server = EventServer.new(redis, namespace, jobid)
-      @event_monitor = EventMonitor.new
-      add_observer(@event_monitor)
-      @event_server.add_observer(@event_monitor)
       @timeout = opts[:timeout]
       @interval = opts[:interval]
+
+      load_lua_scripts
+      @redis.rpush(tasks_key, tasks)
+
+      listeners = Array(opts[:notify])
+      @event_server = EventServer.new(redis, namespace, jobid)
+      @event_monitor = EventMonitor.new
+      listeners << @event_monitor
+
+      listeners.each do |listener|
+        add_observer listener
+        @event_server.add_observer listener
+      end
     end
 
     def self.run(redis, tasks, opts = {})
