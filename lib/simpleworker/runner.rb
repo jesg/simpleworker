@@ -7,10 +7,11 @@ module SimpleWorker
     attr_reader :jobid
 
     DEFAULT_OPTIONS = {
-      :timeout   => 30,
-      :interval  => 5,
-      :namespace => 'simpleworker',
-      :log       => true}
+      :timeout     => 30,
+      :interval    => 5,
+      :namespace   => 'simpleworker',
+      :log         => true,
+      :max_retries => 0}
 
     def initialize(redis, tasks, opts = {})
       opts = DEFAULT_OPTIONS.dup.merge(opts)
@@ -20,6 +21,7 @@ module SimpleWorker
       @namespace = opts[:namespace]
       @timeout = opts[:timeout]
       @interval = opts[:interval]
+      max_retries = opts[:max_retries]
       listeners = Array(opts[:notify])
 
       load_lua_scripts
@@ -32,6 +34,7 @@ module SimpleWorker
       @event_server = EventServer.new(redis, namespace, jobid)
       @event_monitor = EventMonitor.new
       listeners << @event_monitor
+      listeners << RetryListener.new(redis, max_retries, namespace, jobid)
 
       listeners.each do |listener|
         add_observer listener
