@@ -5,6 +5,7 @@ require 'redis'
 require 'observer'
 require 'json'
 require 'securerandom'
+require 'logger'
 
 module SimpleWorker
 end
@@ -18,3 +19,4 @@ require 'simpleworker/event_server'
 require 'simpleworker/task_queue'
 require 'simpleworker/local_worker'
 require 'simpleworker/ssh_worker'
+require 'simpleworker/logging_listener'
