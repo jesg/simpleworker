@@ -1,5 +1,16 @@
 
 module SimpleWorker
+
+  #
+  # SshWorker.new(opts)
+  #
+  # where 'opts' is a Hash of options:
+  #
+  #  :user    => String name of user on remote host (default: `whoami`)
+  #  :host    => String name of remote host (default: `hostname`)
+  #  :port    => String port to connect on the remote host (default: 22)
+  #  :cmd     => String bash string to execute on the remote host in the users login shell, in the remote 'dirname', and with the JOBID environment variable set to the current jobid, (default: `bundle install; rake;`)
+  #  :dirname => String remote directory in the users home directory (default: dynamic jobid)
   class SshWorker < AbstractListener
 
     attr_reader :user, :host, :port, :dirname, :cmd
@@ -12,6 +23,7 @@ module SimpleWorker
       @dirname = opts[:dirname]
     end
 
+    # Destructive rsync to remote and start a process in the background on the remote server.
     def on_start(jobid)
       @dirname ||= jobid
       @jobid = jobid
@@ -20,6 +32,7 @@ module SimpleWorker
       async_cmd
     end
 
+    # Rsync from remote.
     def on_stop
       sync_from_remote
     end
