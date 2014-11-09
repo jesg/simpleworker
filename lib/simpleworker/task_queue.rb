@@ -1,5 +1,13 @@
 
 module SimpleWorker
+
+  # TaskQueue.new(redis, hostname, jobid, opts)
+  #
+  # where hostname is the machines hostname or a unique identifier
+  # and 'opts' is a Hash of options:
+  #
+  #   :namespace    => String prefix to keys in redis used by SimpleWorker (default: simpleworker)
+  #   :task_timeout => Fixnum time after which a task expires, this should be > timout set in Runner (default: 10 seconds)
   class TaskQueue
     include RedisSupport
 
