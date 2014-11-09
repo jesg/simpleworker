@@ -11,6 +11,8 @@ module SimpleWorker
       @process.io.inherit!
     end
 
+    # Start a subprocess with the environment variable 'JOBID' set to the current jobid.
+    #
     def on_start(jobid)
       @process.environment['JOBID'] = jobid
       @process.start
