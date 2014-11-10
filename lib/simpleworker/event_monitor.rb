@@ -15,7 +15,7 @@ module SimpleWorker
     end
 
     def on_node_start(hostname)
-      @event_tracker[hostname] = @current_time
+      @event_tracker[hostname] = latest_time
     end
 
     def on_node_stop(hostname)
@@ -23,17 +23,17 @@ module SimpleWorker
     end
 
     def on_task_start(hostname, task)
-      @event_tracker[hostname] = @current_time
-      @event_tracker[task] = @current_time
+      @event_tracker[hostname] = latest_time
+      @event_tracker[task] = latest_time
     end
 
     def on_task_stop(hostname, task)
-      @event_tracker[hostname] = @current_time
+      @event_tracker[hostname] = latest_time
       @event_tracker.delete(task)
     end
 
     def on_task_expire(hostname, task)
-      @expired_tasks << {:task => task, :hostname => hostname, :time => @current_time}
+      @expired_tasks << {:task => task, :hostname => hostname, :time => latest_time}
       @event_tracker.delete(task)
     end
 
@@ -42,7 +42,7 @@ module SimpleWorker
     end
 
     def update(meth, *args)
-      @current_time = Time.now
+      @latest_time = Time.now
       super(meth, *args)
     end
 
