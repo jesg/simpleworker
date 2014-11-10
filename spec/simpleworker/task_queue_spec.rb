@@ -32,6 +32,14 @@ module SimpleWorker
       task_queue.fire_task_stop(task)
     end
 
+    it 'can expire current task' do
+      redis.should_receive(:evalsha).and_return('first_task')
+      redis.should_receive(:del).with('simpleworker:active:my_jobid:my_hostname:first_task')
+
+      task_queue.pop
+      task_queue.expire_current_task
+    end
+
     it 'can pop from reliable queue' do
       redis.should_receive(:evalsha).and_return('first_task', 'second_task', nil)
       redis.should_receive(:srem).with("simpleworker:active:#{jobid}", "simpleworker:active:#{jobid}:#{hostname}:first_task")

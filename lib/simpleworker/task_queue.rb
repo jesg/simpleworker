@@ -43,11 +43,17 @@ module SimpleWorker
       push_to_log('on_task_stop', @hostname, task)
     end
 
+    def expire_current_task
+      @redis.del "#{@active_key_prefix}:#{@current_task}" if @current_task
+      @current_task = nil
+    end
+
     def each_task
       until pop.nil?
-        fire_task_start @current_task
-        yield @current_task
-        fire_task_stop @current_task
+        local_task = @current_task
+        fire_task_start local_task
+        yield local_task
+        fire_task_stop local_task
       end
     end
 
