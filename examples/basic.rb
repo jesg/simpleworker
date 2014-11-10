@@ -13,6 +13,8 @@ worker_thread = Thread.new do
   task_queue.each_task do |task|
     if task == 'first'
       sleep 15
+    elsif task == 'second'
+      task_queue.expire_current_task
     else
       puts "Task: #{task}"
     end
