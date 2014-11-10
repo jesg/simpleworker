@@ -32,6 +32,13 @@ module SimpleWorker
       task_queue.fire_task_stop(task)
     end
 
+    it 'can log message' do
+      msg = 'hello'
+      redis.should_receive(:rpush).with('simpleworker:log:my_jobid', ['on_log', hostname, msg].to_json)
+
+      task_queue.fire_log_message(msg)
+    end
+
     it 'can expire current task' do
       redis.should_receive(:evalsha).and_return('first_task')
       redis.should_receive(:del).with('simpleworker:active:my_jobid:my_hostname:first_task')

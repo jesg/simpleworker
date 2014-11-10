@@ -48,6 +48,10 @@ module SimpleWorker
       @current_task = nil
     end
 
+    def fire_log_message(msg)
+      push_to_log('on_log', @hostname, msg)
+    end
+
     def each_task
       until pop.nil?
         local_task = @current_task
