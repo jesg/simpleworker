@@ -58,8 +58,6 @@ Examples
 
 Look in the examples directoy for some basic examples.
 
-[Distribute cucumber scenarios](http://jesg.github.io/testing/2014/08/23/distributed-cucumber.html)
-
 Requirements
 ===========
  * redis
