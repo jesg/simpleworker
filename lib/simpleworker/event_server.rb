@@ -31,7 +31,7 @@ module SimpleWorker
         fire('on_task_active', hostname, task)
       end
 
-      remaining
+      remaining + processing[0].size
     end
 
     private

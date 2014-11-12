@@ -3,7 +3,7 @@ module SimpleWorker
   class RetryListener < AbstractListener
     include RedisSupport
 
-    attr_reader :max_retries, :tasks
+    attr_reader :max_retries
 
     def initialize(redis, max_retries, namespace, jobid)
       @redis       = redis
@@ -11,7 +11,6 @@ module SimpleWorker
       @namespace   = namespace
       @jobid       = jobid
       @tracker     = {}
-      @tasks       = []
     end
 
     def on_task_expire(hostname, task)
@@ -21,7 +20,6 @@ module SimpleWorker
       if count < max_retries
         fire_retry task
         @tracker[task] = (count + 1)
-        tasks << task
       end
     end
 

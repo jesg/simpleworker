@@ -18,7 +18,7 @@ module SimpleWorker
       expect(event_server).to receive(:fire).with('on_task_active', 'my2_hostname', 'my2_task')
 
       result = event_server.pull_events
-      expect(result).to eq(0)
+      expect(result).to eq(1)
     end
   end
 end

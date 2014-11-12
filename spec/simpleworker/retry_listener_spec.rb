@@ -13,7 +13,6 @@ module SimpleWorker
       redis.should_not_receive(:rpush)
 
       listener.on_task_expire(hostname, jobid)
-      listener.tasks.should be_empty
     end
 
     it 'does retry once if max retries is 1' do
@@ -21,7 +20,6 @@ module SimpleWorker
       redis.should_receive(:rpush).once
 
       2.times { listener.on_task_expire(hostname, jobid) }
-      listener.tasks.should_not be_empty
     end
   end
 end

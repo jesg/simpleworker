@@ -67,8 +67,7 @@ module SimpleWorker
     it 'continue to run if retries exist' do
       mock_event_monitor.should_receive(:done?).twice.with(2).and_return(false)
       mock_event_monitor.should_receive(:done?).with(0).and_return(true)
-      mock_event_server.should_receive(:pull_events).and_return(2, 0, 0)
-      mock_retry_listener.should_receive(:tasks).and_return([1,2], [])
+      mock_event_server.should_receive(:pull_events).and_return(2, 2, 0)
 
       mock_event_monitor.should_receive(:latest_time).twice.and_return(Time.now)
       runner.add_observer listener
