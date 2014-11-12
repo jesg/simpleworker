@@ -104,6 +104,7 @@ module SimpleWorker
         @redis.del tasks_key
         @redis.del active_tasks_key
         @redis.del log_key
+        @redis.del config_key
       end
     end
 
