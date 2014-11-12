@@ -8,6 +8,10 @@ module SimpleWorker
     let(:hostname)   { 'my_hostname' }
     let(:task_queue) { TaskQueue.new(redis, hostname, jobid) }
 
+    before(:each) do
+      redis.should_receive(:get).with("simpleworker:config:my_jobid").and_return({'task_timeout' => 10}.to_json)
+    end
+
     it 'can log node start' do
       redis.should_receive(:rpush).with('simpleworker:log:my_jobid', ['on_node_start', hostname].to_json)
 

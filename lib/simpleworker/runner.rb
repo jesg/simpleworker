@@ -7,21 +7,23 @@ module SimpleWorker
   # where tasks is an Array of strings
   # and 'opts' is a Hash of options:
   #
-  #   :namespace   => String                  prefix to keys in redis used by SimpleWorker (default: simpleworker)
-  #   :timeout     => Fixnum                  max allowed time between events (default: 30 seconds)
-  #   :interval    => Fixnum                  interval at which SimpleWorker checks the status of all tasks (default: 5 seconds)
-  #   :notify      => Array[AbstractListener] objects implementing the AbstractListener API
-  #   :max_retries => Fixnum                  number of times expired tasks will be retried (default: 0)
+  #   :namespace    => String prefix to keys in redis used by SimpleWorker (default: simpleworker)
+  #   :timeout      => Fixnum max allowed time between events (default: 30 seconds)
+  #   :task_timeout => Fixnum max time allowed for a task to take (default: 10 seconds)
+  #   :interval     => Fixnum interval at which SimpleWorker checks the status of all tasks (default: 5 seconds)
+  #   :notify       =>        Array[AbstractListener] objects implementing the AbstractListener API
+  #   :max_retries  => Fixnum number of times expired tasks will be retried (default: 0)
   class Runner
     include RedisSupport
     include Observable
 
     DEFAULT_OPTIONS = {
-      :timeout     => 30,
-      :interval    => 5,
-      :namespace   => 'simpleworker',
-      :log         => true,
-      :max_retries => 0}
+      :timeout      => 30,
+      :task_timeout => 10,
+      :interval     => 5,
+      :namespace    => 'simpleworker',
+      :log          => true,
+      :max_retries  => 0}
 
     def initialize(redis, tasks, opts = {})
       opts = DEFAULT_OPTIONS.dup.merge(opts)
@@ -34,7 +36,9 @@ module SimpleWorker
       max_retries = opts[:max_retries]
       listeners   = Array(opts[:notify])
 
+      STDERR.puts 'WARNING: to prevent a race condition :timeout should be > :task_timeout' if @timeout < opts[:task_timeout]
       load_lua_scripts
+      @redis.set(config_key, {'task_timeout' => opts[:task_timeout]}.to_json)
       @redis.rpush(tasks_key, tasks)
 
       if opts[:log]

@@ -12,7 +12,6 @@ module SimpleWorker
     include RedisSupport
 
     DEFAULT_OPTIONS = {
-      :task_timeout => 10,
       :namespace    => 'simpleworker'
     }
 
@@ -24,6 +23,7 @@ module SimpleWorker
       @jobid             = jobid
       @hostname          = hostname
       @active_key_prefix = "#{active_tasks_key}:#{@hostname}"
+      @task_timeout      = JSON.parse(@redis.get(config_key))['task_timeout']
       load_lua_scripts
     end
 

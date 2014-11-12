@@ -19,6 +19,7 @@ module SimpleWorker
       EventMonitor.should_receive(:new).and_return(mock_event_monitor)
       RetryListener.should_receive(:new).and_return(mock_retry_listener)
       redis.should_receive(:rpush).with("simpleworker:tasks:#{jobid}", tasks)
+      redis.should_receive(:set).with("simpleworker:config:my_jobid", {'task_timeout' => 10}.to_json)
 
       redis.should_receive(:multi)
     end
