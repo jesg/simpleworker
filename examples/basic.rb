@@ -16,7 +16,7 @@ worker_thread = Thread.new do
     elsif task == 'second'
       task_queue.expire_current_task
     else
-      puts "Task: #{task}"
+      task_queue.fire_log_message "Task: #{task}"
     end
   end
 
