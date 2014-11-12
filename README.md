@@ -26,14 +26,14 @@ ssh_worker = SimpleWorker::SshWorker.new(
 local_worker = SimpleWorker::LocalWorker.new("ruby", "worker.rb")
 
 runner = SimpleWorker::Runner.new(redis, tasks,
-  :namespace   => 'foobar',                    # redis key prefix
-  :notify      => [local_worker, ssh_worker],  # listeners that implement AbstractListener
-  :max_retries => 1,                           # max times expired tasks will be retried
-  :timeout     => 60,                          # timout if inactive
-  :interval    => 2)                           # interval at which to pull events from redis in seconds
+  :namespace    => 'foobar',                    # redis key prefix
+  :notify       => [local_worker, ssh_worker],  # listeners that implement AbstractListener
+  :max_retries  => 1,                           # max times expired tasks will be retried
+  :timeout      => 60,                          # timout in seconds if inactive
+  :task_timeout => 14,                          # max time for a task before it expires
+  :interval     => 2)                           # interval at which to pull redis event log for the job in seconds
 
 runner.run
-
 ```
 
 Next create a script to work on the automation tasks.
