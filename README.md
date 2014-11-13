@@ -3,6 +3,9 @@ SimpleWorker
 
 Distribute automation tasks on multiple machines.
 
+[![Gem Version](https://badge.fury.io/rb/simpleworker.svg)](http://badge.fury.io/rb/simpleworker)
+[![Build Status](https://secure.travis-ci.org/jesg/simpleworker.png)](http://travis-ci.org/jesg/simpleworker)
+
 Usage
 =====
 
