@@ -9,12 +9,12 @@ task_queue.fire_start
 task_queue.each_task do |task|
   status = nil
   begin
-    Cucumber::Cli::Main.execute task
+    Cucumber::Cli::Main.execute [task]
   rescue SystemExit => e
     status = e.success?
   end
 
-  fire_log_message "Cucumber task: #{task} status: #{status}"
+  task_queue.fire_log_message "Cucumber task: #{task} status: #{status}"
 end
 
 task_queue.fire_stop
