@@ -37,7 +37,8 @@ module SimpleWorker
     private
 
     def parse_active_task_key(str)
-      str.split(':').slice(3, 4)
+      hostname, *task = str.split(':')[3..-1]
+      [hostname, task.join(':')]
     end
 
     def fire(*args)
